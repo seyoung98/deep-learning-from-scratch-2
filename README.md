@@ -3,7 +3,7 @@
 - 스터디 시작 : 2022. 01. 09
 - 스터디 목적 : 자연어처리 스터디
 
-<img src="G:\내 드라이브\Colab Notebooks\밑바닥부터 시작하는 딥러닝2\img.jpg" width="300px" alt="book"></img><br/>
+<img src="https://github.com/seyoung98/deep-learning-from-scratch-2/blob/master/img.jpg" width="300px" alt="book"></img><br/>
 
 ## 목차
 
