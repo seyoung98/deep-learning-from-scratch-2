@@ -1,12 +1,12 @@
+from common.np import *
 import sys
 
 sys.path.append("..")
-from common.np import *
 
 
 class SGD:
     """
-    확률적 경사하강법(SGD, Stochastic Gradient Descent)
+    (SGD, Stochastic Gradient Descent)
         W <- W - lr * (dL/dW)
     """
 
@@ -20,7 +20,7 @@ class SGD:
 
 class Momentum:
     """
-    모멘텀 SGD(Momentum SGD)
+     Momentum SGD(Momentum SGD)
         v <- momentum * v - lr * (dL/dW)
         W <- W + v
     """
@@ -43,8 +43,7 @@ class Momentum:
 
 class Nesterov:
     """
-    네스테로프 가속 경사(NAG; Nesterov's Accelerated Gradient) (http://arxiv.org/abs/1212.0901)
-    '네스테로프 모멘텀 최적화'라고도 한다.
+    (NAG; Nesterov's Accelerated Gradient) (http://arxiv.org/abs/1212.0901)
         v <- momentum * v - lr * (dL/dW)
         W <- W + momentum^2 * v - (1 + momentum)*lr*(dL/dW)
     """
