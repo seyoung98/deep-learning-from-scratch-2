@@ -2,6 +2,7 @@ from common.np import *
 import os
 import sys
 sys.path.append('..')
+# -*- coding: utf-8 -*-
 
 
 def preprocess(text):
@@ -22,41 +23,41 @@ def preprocess(text):
 
 
 def cos_similarity(x, y, eps=1e-8):
-    '''ÄÚ»çÀÎ À¯»çµµ »êÃâ
-    :param x: º¤ÅÍ
-    :param y: º¤ÅÍ
-    :param eps: '0À¸·Î ³ª´©±â'¸¦ ¹æÁöÇÏ±â À§ÇÑ ÀÛÀº °ª
+    '''ì½”ì‚¬ì¸ ìœ ì‚¬ë„ ì‚°ì¶œ
+    :param x: ë²¡í„°
+    :param y: ë²¡í„°
+    :param eps: '0ìœ¼ë¡œ ë‚˜ëˆ„ê¸°'ë¥¼ ë°©ì§€í•˜ê¸° ìœ„í•œ ì‘ì€ ê°’
     :return:
     '''
-    nx = x / np.sqrt(np.sum(x**2) + eps)  # xÀÇ Á¤±ÔÈ­
-    ny = y / np.sqrt(np.sum(y**2) + eps)  # yÀÇ Á¤±ÔÈ­
+    nx = x / np.sqrt(np.sum(x**2) + eps)  # xì˜ ì •ê·œí™”
+    ny = y / np.sqrt(np.sum(y**2) + eps)  # yì˜ ì •ê·œí™”
     return np.dot(nx, ny)
 
 
 def most_similar(query, word_to_id, id_to_word, word_matrix, top=5):
-    '''À¯»ç ´Ü¾î °Ë»ö
-    :param query: Äõ¸®(ÅØ½ºÆ®)
-    :param word_to_id: ´Ü¾î¿¡¼­ ´Ü¾î ID·Î º¯È¯ÇÏ´Â µñ¼Å³Ê¸®
-    :param id_to_word: ´Ü¾î ID¿¡¼­ ´Ü¾î·Î º¯È¯ÇÏ´Â µñ¼Å³Ê¸®
-    :param word_matrix: ´Ü¾î º¤ÅÍ¸¦ Á¤¸®ÇÑ Çà·Ä. °¢ Çà¿¡ ÇØ´ç ´Ü¾î º¤ÅÍ°¡ ÀúÀåµÇ¾î ÀÖ´Ù°í °¡Á¤ÇÑ´Ù.
-    :param top: »óÀ§ ¸î °³±îÁö Ãâ·ÂÇÒ Áö ÁöÁ¤
+    '''ìœ ì‚¬ ë‹¨ì–´ ê²€ìƒ‰
+    :param query: ì¿¼ë¦¬(í…ìŠ¤íŠ¸)
+    :param word_to_id: ë‹¨ì–´ì—ì„œ ë‹¨ì–´ IDë¡œ ë³€í™˜í•˜ëŠ” ë”•ì…”ë„ˆë¦¬
+    :param id_to_word: ë‹¨ì–´ IDì—ì„œ ë‹¨ì–´ë¡œ ë³€í™˜í•˜ëŠ” ë”•ì…”ë„ˆë¦¬
+    :param word_matrix: ë‹¨ì–´ ë²¡í„°ë¥¼ ì •ë¦¬í•œ í–‰ë ¬. ê° í–‰ì— í•´ë‹¹ ë‹¨ì–´ ë²¡í„°ê°€ ì €ì¥ë˜ì–´ ìˆë‹¤ê³  ê°€ì •í•œë‹¤.
+    :param top: ìƒìœ„ ëª‡ ê°œê¹Œì§€ ì¶œë ¥í•  ì§€ ì§€ì •
     '''
-    # 1) °Ë»ö¾î¸¦ ²¨³½´Ù.
+    # 1) ê²€ìƒ‰ì–´ë¥¼ êº¼ë‚¸ë‹¤.
     if query not in word_to_id:
-        print(f'{query}(À»)¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.')
+        print(f'{query}(ì„)ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.')
         return
 
     print(f'\n[query] {query}')
     query_id = word_to_id[query]
     query_vec = word_matrix[query_id]
 
-    # 2) ÄÚ»çÀÎ À¯»çµµ °è»ê
+    # 2) ì½”ì‚¬ì¸ ìœ ì‚¬ë„ ê³„ì‚°
     vocab_size = len(id_to_word)
     similarity = np.zeros(vocab_size)
     for i in range(vocab_size):
         similarity[i] = cos_similarity(word_matrix[i], query_vec)
 
-    # 3) ÄÚ»çÀÎ À¯»çµµ¸¦ ±âÁØÀ¸·Î ³»¸²Â÷¼øÀ¸·Î Ãâ·Â
+    # 3) ì½”ì‚¬ì¸ ìœ ì‚¬ë„ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë‚´ë¦¼ì°¨ìˆœìœ¼ë¡œ ì¶œë ¥
     count = 0
     for i in (-1 * similarity).argsort():
         if id_to_word[i] == query:
@@ -69,10 +70,10 @@ def most_similar(query, word_to_id, id_to_word, word_matrix, top=5):
 
 
 def convert_one_hot(corpus, vocab_size):
-    '''¿øÇÖ Ç¥ÇöÀ¸·Î º¯È¯
-    :param corpus: ´Ü¾î ID ¸ñ·Ï(1Â÷¿ø ¶Ç´Â 2Â÷¿ø ³ÑÆÄÀÌ ¹è¿­)
-    :param vocab_size: ¾îÈÖ ¼ö
-    :return: ¿øÇÖ Ç¥Çö(2Â÷¿ø ¶Ç´Â 3Â÷¿ø ³ÑÆÄÀÌ ¹è¿­)
+    '''ì›í•« í‘œí˜„ìœ¼ë¡œ ë³€í™˜
+    :param corpus: ë‹¨ì–´ ID ëª©ë¡(1ì°¨ì› ë˜ëŠ” 2ì°¨ì› ë„˜íŒŒì´ ë°°ì—´)
+    :param vocab_size: ì–´íœ˜ ìˆ˜
+    :return: ì›í•« í‘œí˜„(2ì°¨ì› ë˜ëŠ” 3ì°¨ì› ë„˜íŒŒì´ ë°°ì—´)
     '''
     N = corpus.shape[0]
     if corpus.ndim == 1:
@@ -91,11 +92,11 @@ def convert_one_hot(corpus, vocab_size):
 
 
 def create_co_matrix(corpus, vocab_size, window_size=1):
-    '''µ¿½Ã¹ß»ı Çà·Ä »ı¼º
-    :param corpus: ¸»¹¶Ä¡(´Ü¾î ID ¸ñ·Ï)
-    :param vocab_size: ´Ü¾î ¼ö
-    :param window_size: À©µµ¿ì Å©±â(À©µµ¿ì Å©±â°¡ 1ÀÌ¸é Å¸±ê ´Ü¾î ÁÂ¿ì ÇÑ ´Ü¾î¾¿ÀÌ ¸Æ¶ô¿¡ Æ÷ÇÔ)
-    :return: µ¿½Ã¹ß»ı Çà·Ä
+    '''ë™ì‹œë°œìƒ í–‰ë ¬ ìƒì„±
+    :param corpus: ë§ë­‰ì¹˜(ë‹¨ì–´ ID ëª©ë¡)
+    :param vocab_size: ë‹¨ì–´ ìˆ˜
+    :param window_size: ìœˆë„ìš° í¬ê¸°(ìœˆë„ìš° í¬ê¸°ê°€ 1ì´ë©´ íƒ€ê¹ƒ ë‹¨ì–´ ì¢Œìš° í•œ ë‹¨ì–´ì”©ì´ ë§¥ë½ì— í¬í•¨)
+    :return: ë™ì‹œë°œìƒ í–‰ë ¬
     '''
     corpus_size = len(corpus)
     co_matrix = np.zeros((vocab_size, vocab_size), dtype=np.int32)
@@ -118,14 +119,14 @@ def create_co_matrix(corpus, vocab_size, window_size=1):
 
 # common/util.py
 def ppmi(C, verbose=False, eps=1e-8):
-    '''PPMI(Á¡º° »óÈ£Á¤º¸·®) »ı¼º
-    :param C: µ¿½Ã¹ß»ı Çà·Ä
-    :param verbose: ÁøÇà »óÈ²À» Ãâ·ÂÇÒÁö ¿©ºÎ
+    '''PPMI(ì ë³„ ìƒí˜¸ì •ë³´ëŸ‰) ìƒì„±
+    :param C: ë™ì‹œë°œìƒ í–‰ë ¬
+    :param verbose: ì§„í–‰ ìƒí™©ì„ ì¶œë ¥í• ì§€ ì—¬ë¶€
     :return: ppmi
     '''
     M = np.zeros_like(C, dtype=np.float32)
     N = np.sum(C)  # num of corpus
-    S = np.sum(C, axis=0)  # °¢ ´Ü¾îÀÇ ÃâÇö È½¼ö
+    S = np.sum(C, axis=0)  # ê° ë‹¨ì–´ì˜ ì¶œí˜„ íšŸìˆ˜
     total = C.shape[0] * C.shape[1]
     cnt = 0
 
@@ -137,12 +138,12 @@ def ppmi(C, verbose=False, eps=1e-8):
             if verbose:
                 cnt += 1
                 if cnt % (total//100) == 0:
-                    print(f'{(100*cnt/total):.2f} ¿Ï·á')
+                    print(f'{(100*cnt/total):.2f} ì™„ë£Œ')
     return M
 
 
 def eval_perplexity(model, corpus, batch_size=10, time_size=35):
-    print('ÆÛÇÃ·º¼­Æ¼ Æò°¡ Áß ...')
+    print('í¼í”Œë ‰ì„œí‹° í‰ê°€ ì¤‘ ...')
     corpus_size = len(corpus)
     total_loss, loss_cnt = 0, 0
     max_iters = (corpus_size - 1) // (batch_size * time_size)
@@ -175,12 +176,12 @@ def eval_perplexity(model, corpus, batch_size=10, time_size=35):
 def eval_seq2seq(model, question, correct, id_to_char,
                  verbos=False, is_reverse=False):
     correct = correct.flatten()
-    # ¸Ó¸´±ÛÀÚ
+    # ë¨¸ë¦¿ê¸€ì
     start_id = correct[0]
     correct = correct[1:]
     guess = model.generate(question, start_id, len(correct))
 
-    # ¹®ÀÚ¿­·Î º¯È¯
+    # ë¬¸ìì—´ë¡œ ë³€í™˜
     question = ''.join([id_to_char[int(c)] for c in question.flatten()])
     correct = ''.join([id_to_char[int(c)] for c in correct])
     guess = ''.join([id_to_char[int(c)] for c in guess])
@@ -211,17 +212,17 @@ def eval_seq2seq(model, question, correct, id_to_char,
 
 
 def create_contexts_target(corpus, window_size=1):
-    '''¸Æ¶ô°ú Å¸±ê »ı¼º
-    :param corpus: ¸»¹¶Ä¡(´Ü¾î ID ¸ñ·Ï)
-    :param window_size: À©µµ¿ì Å©±â(À©µµ¿ì Å©±â°¡ 1ÀÌ¸é Å¸±ê ´Ü¾î ÁÂ¿ì ÇÑ ´Ü¾î¾¿ÀÌ ¸Æ¶ô¿¡ Æ÷ÇÔ)
-    :return: (¸Æ¶ô, Å¸°Ù)ÀÇ np.array
+    '''ë§¥ë½ê³¼ íƒ€ê¹ƒ ìƒì„±
+    :param corpus: ë§ë­‰ì¹˜(ë‹¨ì–´ ID ëª©ë¡)
+    :param window_size: ìœˆë„ìš° í¬ê¸°(ìœˆë„ìš° í¬ê¸°ê°€ 1ì´ë©´ íƒ€ê¹ƒ ë‹¨ì–´ ì¢Œìš° í•œ ë‹¨ì–´ì”©ì´ ë§¥ë½ì— í¬í•¨)
+    :return: (ë§¥ë½, íƒ€ê²Ÿ)ì˜ np.array
     '''
     target = corpus[window_size:-window_size]
     contexts = []
 
     for idx in range(window_size, len(corpus)-window_size):
         cs = []
-        # wiondow_size¸¸Å­ Å¸°Ù ´Ü¾î ÁÂ¿ì context °¡Á®¿À±â
+        # wiondow_sizeë§Œí¼ íƒ€ê²Ÿ ë‹¨ì–´ ì¢Œìš° context ê°€ì ¸ì˜¤ê¸°
         for t in range(-window_size, window_size+1):
             if t != 0:
                 cs.append(corpus[idx + t])
@@ -259,7 +260,7 @@ def clip_grads(grads, max_norm):
 def analogy(a, b, c, word_to_id, id_to_word, word_matrix, top=5, answer=None):
     for word in (a, b, c):
         if word not in word_to_id:
-            print(f'{word}(À»)¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.')
+            print(f'{word}(ì„)ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.')
             return
 
     print(f'\n[analogy] {a}:{b} = {c}:?')
