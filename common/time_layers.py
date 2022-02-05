@@ -9,7 +9,7 @@ class RNN:
     def __init__(self, Wx, Wh, b):
         self.params = [Wx, Wh, b]
         self.grads = [np.zeros_like(Wx), np.zeros_like(Wh), np.zeros_like(b)]
-        self.cache = None  # ¿ªÀüÆÄ¿¡ »ç¿ëÇÒ Áß°£ µ¥ÀÌÅÍ
+        self.cache = None  # ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     def forward(self, x, h_prev):
         Wx, Wh, b = self.params
@@ -23,7 +23,7 @@ class RNN:
         Wx, Wh, b = self.params
         x, h_prev, h_next = self.cache
 
-        dt = dh_next * (1 - h_next ** 2)  # tanh ¹ÌºÐ
+        dt = dh_next * (1 - h_next ** 2)  # tanh ï¿½Ìºï¿½
         db = np.sum(dt, axis=0)
         dWh = np.dot(h_prev.T, dt)  # shape: (H, N) x (N, H) = (H, H)
         dh_prev = np.dot(dt, Wh.T)  # shape: (N, H) x (H, H) = (N, H)
@@ -41,17 +41,17 @@ class TimeRNN:
     def __init__(self, Wx, Wh, b, stateful=False):
         self.params = [Wx, Wh, b]
         self.grads = [np.zeros_like(Wx), np.zeros_like(Wh), np.zeros_like(b)]
-        self.layers = None  # RNN °èÃþÀ» ¸®½ºÆ®·Î ÀúÀå
+        self.layers = None  # RNN ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         self.h, self.dh = None, None
         self.stateful = stateful
 
     def set_state(self, h):
-        '''hidden state(h)¸¦ ¼³Á¤ÇÏ´Â ¸Þ¼­µå'''
+        '''hidden state(h)ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½'''
         self.h = h
 
     def reset_state(self):
-        '''hidden state(h)¸¦ ÃÊ±âÈ­ÇÏ´Â ¸Þ¼­µå'''
+        '''hidden state(h)ï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½'''
         self.h = None
 
     def forward(self, xs):
@@ -83,7 +83,7 @@ class TimeRNN:
         grads = [0, 0, 0]
         for t in reversed(range(T)):
             layer = self.layers[t]
-            dx, dh = layer.backward(dhs[:, t, :] + dh)  # ÇÕ»êµÈ ±â¿ï±â
+            dx, dh = layer.backward(dhs[:, t, :] + dh)  # ï¿½Õ»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             dxs[:, t, :] = dx
 
             for i, grad in enumerate(layer.grads):
@@ -101,9 +101,9 @@ class LSTM:
         '''
         Parameters
         ----------
-        Wx: ÀÔ·Â x¿¡ ´ëÇÑ °¡ÁßÄ¡ ¸Å°³º¯¼ö(4°³ºÐÀÇ °¡ÁßÄ¡°¡ ´ã°Ü ÀÖÀ½)
-        Wh: Àº´Ð »óÅÂ h¿¡ ´ëÇÑ °¡ÀåÃß ¸Å°³º¯¼ö(4°³ºÐÀÇ °¡ÁßÄ¡°¡ ´ã°Ü ÀÖÀ½)
-        b: ÆíÇâ£¨4°³ºÐÀÇ ÆíÇâÀÌ ´ã°Ü ÀÖÀ½£©  
+        Wx: ï¿½Ô·ï¿½ xï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½(4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+        Wh: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ hï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½(4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+        b: ï¿½ï¿½ï¿½â£¨4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
         '''
         self.params = [Wx, Wh, b]
         self.grads = [np.zeros_like(Wx), np.zeros_like(Wh), np.zeros_like(b)]
@@ -304,19 +304,19 @@ class TimeSoftmaxWithLoss:
     def forward(self, xs, ts):
         N, T, V = xs.shape
 
-        if ts.ndim == 3:  # Á¤´ä ·¹ÀÌºíÀÌ ¿øÇÖ º¤ÅÍÀÎ °æ¿ì
+        if ts.ndim == 3:  # ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             ts = ts.argmax(axis=2)
 
         mask = (ts != self.ignore_label)
 
-        # ¹èÄ¡¿ë°ú ½Ã°è¿­¿ëÀ» Á¤¸®(reshape)
+        # ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ ï¿½Ã°è¿­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(reshape)
         xs = xs.reshape(N * T, V)
         ts = ts.reshape(N * T)
         mask = mask.reshape(N * T)
 
         ys = softmax(xs)
         ls = np.log(ys[np.arange(N * T), ts])
-        ls *= mask  # ignore_label¿¡ ÇØ´çÇÏ´Â µ¥ÀÌÅÍ´Â ¼Õ½ÇÀ» 0À¸·Î ¼³Á¤
+        ls *= mask  # ignore_labelï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í´ï¿½ ï¿½Õ½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         loss = -np.sum(ls)
         loss /= mask.sum()
 
@@ -329,7 +329,7 @@ class TimeSoftmaxWithLoss:
         dx[np.arange(N * T), ts] -= 1
         dx *= dout
         dx /= mask.sum()
-        dx *= mask[:, np.newaxis]  # ignore_label¿¡ ÇØ´çÇÏ´Â µ¥ÀÌÅÍ´Â ±â¿ï±â 0À¸·Î ¼³Á¤
+        dx *= mask[:, np.newaxis]  # ignore_labelï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í´ï¿½ ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         dx = dx.reshape((N, T, V))
 
